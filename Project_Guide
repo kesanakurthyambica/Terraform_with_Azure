@@ -1,0 +1,99 @@
+Using Terraform with Azure
+Introduction
+Welcome to the Using Terraform with Azure lab. In this lab, we will cover three objectives:
+
+Log into Azure
+Create the Terraform Configuration
+Deploy the Configuration
+By the end of the lab, you'll have deployed a container group to Microsoft Azure using Terraform.
+
+Solution
+Log into Azure
+In this objective, you'll use the credentials provided by the lab to log into Azure using the Azure CLI.
+
+From your terminal, run az login. A browser window will open.
+In the browser window, use the Azure credentials provided to log into Azure.
+From your terminal run az group list --query [].name to confirm you are logged in.
+Create the Terraform Configuration
+In this objective, you'll create a Terraform configuration that deploys a container group to Azure.
+
+Create a new directory called container_group_lab
+mkdir container_group_lab
+Move into the container_group_lab directory
+cd container_group_lab
+Create two files: terraform.tf and main.tf
+touch [terraform,main].tf
+Paste the following code into the terraform.tf file:
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
+    }
+  }
+}
+Paste the following code into the main.tf file:
+variable "resource_group_name" {
+  type        = string
+  description = "Name of the resource group provided by the lab."
+}
+
+variable "prefix" {
+  type        = string
+  description = "Prefix to be used for all resources in this lab."
+}
+
+provider "azurerm" {
+  features {}
+  skip_provider_registration = true
+}
+
+data "azurerm_resource_group" "main" {
+  name = var.resource_group_name
+}
+
+resource "azurerm_container_group" "main" {
+  name                = "${var.prefix}-container-group"
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
+  ip_address_type     = "Public"
+  dns_name_label      = "${var.prefix}-container-group"
+  os_type             = "Linux"
+  container {
+    name   = "hello-world"
+    image  = "mcr.microsoft.com/azuredocs/aci-helloworld"
+    cpu    = "0.5"
+    memory = "1.5"
+    ports {
+      port     = 80
+      protocol = "TCP"
+    }
+  }
+}
+
+output "dns_hostname" {
+  value = azurerm_container_group.main.fqdn
+}
+Save both files
+Initialize your working directory.
+terraform init
+Format and validate the code.
+terraform fmt
+terraform validate
+Deploy the Configuration
+In this objective, you'll deploy the Terraform configuration to Azure and verify the deployment.
+
+Create a terraform.tfvars file in the container_group_lab directory
+touch terraform.tfvars
+Paste the following into the terraform.tfvars file:
+resource_group_name = ""
+prefix              = ""
+Retrieve the name of the resource group created for you by the lab.
+az group list --query [].name -o tsv
+Update the terraform.tfvars file with the provided resource group name from the lab and a globally unique prefix, such as your initials and a few numbers.
+Plan and apply the configuration. Enter yes when prompted.
+terraform plan
+terraform apply
+Visit the address shown in the output and verify the webpage loads.
+Conclusion
+You've successfully authenticated to Azure and deployed a container group using Terraform!
