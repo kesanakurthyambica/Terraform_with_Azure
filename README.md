@@ -1,7 +1,5 @@
 # Using Terraform with Azure
 
-Welcome to the **Using Terraform with Azure** lab. This guide walks you through deploying a container group to Microsoft Azure using Terraform.
-
 ## 🚀 Objectives
 
 By the end of this lab, you will be able to:
