@@ -2,12 +2,12 @@
 ** Introduction **
 Welcome to the Using Terraform with Azure lab. In this lab, we will cover three objectives:
 
-Log into Azure
+** Log into Azure **
 Create the Terraform Configuration
 Deploy the Configuration
 By the end of the lab, you'll have deployed a container group to Microsoft Azure using Terraform.
 
-Solution
+** Solution **
 Log into Azure
 In this objective, you'll use the credentials provided by the lab to log into Azure using the Azure CLI.
 
@@ -75,12 +75,14 @@ output "dns_hostname" {
   value = azurerm_container_group.main.fqdn
 }
 Save both files
-Initialize your working directory.
+
+** Initialize your working directory **
 terraform init
 Format and validate the code.
 terraform fmt
 terraform validate
-Deploy the Configuration
+
+** Deploy the Configuration **
 In this objective, you'll deploy the Terraform configuration to Azure and verify the deployment.
 
 Create a terraform.tfvars file in the container_group_lab directory
@@ -95,5 +97,6 @@ Plan and apply the configuration. Enter yes when prompted.
 terraform plan
 terraform apply
 Visit the address shown in the output and verify the webpage loads.
-Conclusion
+
+** Conclusion **
 You've successfully authenticated to Azure and deployed a container group using Terraform!
